@@ -43,6 +43,14 @@ app.get('/', function(req,res){
   });
 });
 
+app.get('/article/:id', function(req,res){
+  Article.findById(req.params.id, function(err, article){
+    res.render('article',{
+      article:article
+    });
+  });
+});
+
 app.get('/articles/add', function(req,res){
   res.render('add',{
     title:'Add Articles'
