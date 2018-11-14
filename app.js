@@ -36,7 +36,7 @@ app.get('/', function(req,res){
       console.log(err);
     }else{
       res.render('index',{
-        title:'title',
+        title:'Articles',
         articles:articles
       });
     }
@@ -45,7 +45,7 @@ app.get('/', function(req,res){
 
 app.get('/articles/add', function(req,res){
   res.render('add',{
-    title:'title'
+    title:'Add Articles'
   });
 });
 
