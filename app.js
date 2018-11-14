@@ -15,14 +15,22 @@ db.on('error', function (err) {
 
 const app = express();
 
+let Article = require('./models/article');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 
 app.get('/', function(req,res){
-  res.render('index',{
-    title:'title'
+  Article.find({}, function(err, articles){
+    if(err){
+      console.log(err);
+    }else{
+      res.render('index',{
+        title:'title',
+        articles:articles
+      });
+    }
   });
 });
 
