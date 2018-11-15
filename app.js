@@ -2,6 +2,9 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
+const flash = require('connect-flash');
+const session = require('express-session');
 
 
 mongoose.connect('mongodb://localhost/nodeapp');
@@ -29,6 +32,36 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}));
+
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
+
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value){
+    var namespace = param.split('.')
+    , root = namespace.shift()
+    , formParam = root;
+
+    while(namespace.length){
+      formParam += '['+ namespace.shift() + ']';
+        }
+        return {
+          param: formParam,
+          msg: msg,
+          value: value
+        };
+  }
+}));
+
 
 app.get('/', function(req,res){
   Article.find({}, function(err, articles){
@@ -58,19 +91,35 @@ app.get('/articles/add', function(req,res){
 });
 
 app.post('/articles/add', function(req,res){
-  let article = new Article();
-  article.title = req.body.title;
-  article.author = req.body.author;
-  article.body = req.body.body
+  req.checkBody('title','Title is required').notEmpty();
+  req.checkBody('author','Author is required').notEmpty();
+  req.checkBody('body','Body is required').notEmpty();
 
-  article.save(function(err){
-    if(err){
-      console.log(err);
-    }else {
-      res.redirect('/');
-    }
-  });
+//get errors
+  let errors = req.validationErrors();
+
+  if(errors){
+    res.render('add', {
+      title:'Add Article',
+      errors:errors
+    });
+  }else{
+    let article = new Article();
+    article.title = req.body.title;
+    article.author = req.body.author;
+    article.body = req.body.body
+
+    article.save(function(err){
+      if(err){
+        console.log(err);
+      }else {
+        req.flash('success','Article Added');
+        res.redirect('/');
+      }
+    });
+  }
 });
+
 
 app.get('/article/edit/:id', function(req,res){
   Article.findById(req.params.id, function(err, article){
@@ -94,6 +143,7 @@ app.post('/articles/edit/:id', function(req,res){
     if(err){
       console.log(err);
     }else {
+      req.flash('success','Article Updated');
       res.redirect('/');
     }
   });
