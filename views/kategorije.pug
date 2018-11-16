@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  ul.list-group
+    each row, i in rows
+      li.list-group-item
+        a(href="kategorije/"+row.id)=row.ime_kategorije

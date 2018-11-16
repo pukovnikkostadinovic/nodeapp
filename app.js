@@ -16,6 +16,7 @@ let connection = mysql.createConnection({
   database: 'beer'
 });
 
+connection.connect();
 
 
 
@@ -97,24 +98,59 @@ app.get('/', function(req,res){
     }
   });
 });
-connection.connect();
-let query = 'select t.ime_komponente, sum(k.kolicina) kolicina from komponente t, komp_lok_kol k where t.id=k.komp_id group by t.ime_komponente';
-connection.query(query,function(err, rows, fields){
-  if(err) throw err;
 app.get('/arduino', function(req, res){
-  res.render('komponente',{
-    rows:rows
-  });
-});
-});
-connection.end();
+  let query = 'select t.ime_komponente, sum(k.kolicina) kolicina from komponente t, komp_lok_kol k where t.id=k.komp_id group by t.ime_komponente';
+  connection.query(query,function(err, rows, fields){
+    if(err) throw err;
 
+    res.render('komponente',{
+      rows:rows
+    });
+  });
+  //connection.end();
+});
+
+app.get('/arduino/kategorije', function(req, res){
+  let query = 'select id, ime_kategorije from kategorije_komponenti';
+  connection.query(query,function(err, rows, fields){
+    if(err) throw err;
+
+    res.render('kategorije',{
+      rows:rows
+    });
+  });
+
+});
+
+app.get('/arduino/kategorije/:id', function(req, res){
+  let query = 'select t.id, t.ime_komponente, sum(k.kolicina) kolicina from komponente t, komp_lok_kol k where t.id=k.komp_id and t.kateg_id ='+req.params.id+' group by t.id,t.ime_komponente';
+  connection.query(query,function(err, rows, fields){
+    if(err) throw err;
+
+    res.render('komponente1',{
+      rows:rows
+    });
+  });
+
+});
+
+app.get('/arduino/kategorije/komp/:id', function(req, res){
+  let query = 'select t.ime_komponente, t.kratak_opis_komp, k.kolicina, l.ime_lokacije from komponente t, komp_lok_kol k, lokacije l where t.id=k.komp_id and l.id=k.lok_id and t.id='+req.params.id;
+  connection.query(query,function(err, rows, fields){
+    if(err) throw err;
+
+    res.render('komponente2',{
+      rows:rows
+    });
+  });
+
+});
 
 let articles=require('./routes/articles');
 let users=require('./routes/users');
 app.use('/articles',articles);
 app.use('/users',users);
-
+//connection.end();
 app.listen(3000, function(){
   console.log('Server started on port 3000...');
 });

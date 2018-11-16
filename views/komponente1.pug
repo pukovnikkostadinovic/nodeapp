@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  ul.list-group
+    table.table
+      thead
+        tr
+          th(scope='col') Komponenta
+          th(scope='col') Kolicina
+      tbody
+        each row, i in rows
+          tr
+            td
+              a(href='/arduino/kategorije/komp/'+row.id)=row.ime_komponente
+            td=row.kolicina
