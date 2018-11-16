@@ -1,16 +1,27 @@
 extends layout
 
 block content
-  h1=rows[0].ime_komponente
-  h3=rows[0].kratak_opis_komp
-  table.table
-    thead
-      tr
-        th(scope='col') Količina
-        th(scope='col') Lokacija
-    tbody
-      each row, i in rows
+  h1=komponente[0].ime_komponente
+  h3=komponente[0].kratak_opis_komp
+  
+  
+  
+    table.table
+      thead
         tr
-          td=row.kolicina
-          td=row.ime_lokacije
-  a.btn.btn-primary(href="/arduino/kategorije/"+kategorija) Natrag
+          th(scope='col') Količina
+          th(scope='col') Lokacija
+        tbody
+          each komponenta, i in komponente
+              p1 hahahahah
+              tr
+                td
+                  input.form-control(name='kol', type='number', value=komponenta.kolicina)
+                td
+                  select.form-control(name='lok')
+                    each lokacija, i in lokacije
+                      if komponenta.ime_lokacije === lokacija.ime_lokacije
+                        option(value=lokacija.id, selected="selected")=lokacija.ime_lokacije
+                      else
+                        option(value=lokacija.id)=lokacija.ime_lokacije
+  a.btn.btn-primary(href="/arduino/kategorije/"+kategorija_id) Natrag
