@@ -28,7 +28,7 @@ router.post('/add', function(req,res){
     let article = new Article();
     article.title = req.body.title;
     article.author = req.user._id;
-    article.body = req.body.body
+    article.body = req.body.body;
 
     article.save(function(err){
       if(err){
@@ -41,6 +41,28 @@ router.post('/add', function(req,res){
   }
 });
 
+router.post('/arduino/:id', function(req,res){
+  //console.log(req.params.id);
+  let on_off = {};
+  let query = {_id:req.params.id}
+  if(req.body.on){
+    on_off.on_off='1';
+  }else{
+    on_off.on_off='0'
+    //console.log(req.body.off);
+  }
+  Article.update(query, on_off, function(err){
+    res.redirect('/articles/'+req.params.id);
+  });
+});
+
+router.get('/arduino/:id', function(req,res){
+  Article.findById(req.params.id, function(err, state){
+      res.render('arduino',{
+        state:state.on_off
+    });
+  });
+});
 
 router.get('/edit/:id', ensureAuthenticated, function(req,res){
   Article.findById(req.params.id, function(err, article){

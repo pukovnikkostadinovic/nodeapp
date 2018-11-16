@@ -4,6 +4,11 @@ block content
   h1=article.title
   h5 Written by #{author}
   p= article.body
+  h1= article.on_off
+  hr
+  form(method='POST', action='/articles/arduino/'+article._id)
+    button.btn.btn-success(name='on', type='submit', value='1') On
+    button.btn.btn-danger(name='off', type='submit', value='0') Off
   hr
   if user
     if user.id == article.author

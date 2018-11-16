@@ -13,6 +13,10 @@ let articleSchema= mongoose.Schema({
     type: String,
     required: true
   },
+  on_off:{
+    type: String,
+    required: false
+  }
 });
 
 let Article = module.exports = mongoose.model('Article', articleSchema);
