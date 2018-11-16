@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  h1 Dodaj komponentu
+  form(method='POST', action='/arduino/dodaj')
+    #form-group
+      label Ime komponente:
+      input.form-control(name='ime_komp', type='text')
+    #form-group
+      label Kratki opis:
+      textarea.form-control(name='k_opis_komp')
+    #form-group
+      label Odaberi količinu
+      input.form-control(name='kol', type='number', value='0')
+    #form-group
+      label(for='sel1') Odaberi kategoriju:
+      select.form-control(name='kateg')
+        each kategorija, i in kategorije
+          option(value=kategorija.id)=kategorija.ime_kategorije
+    #form-group
+      label(for='sel1') Odaberi lokaciju:
+      select.form-control(name='lok')
+        each lokacija, i in lokacije
+          option(value=lokacija.id)=lokacija.ime_lokacije
+      br
+    input.btn.btn-primary(type='submit', value='Submit')
