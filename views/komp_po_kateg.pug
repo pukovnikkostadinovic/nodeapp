@@ -11,5 +11,5 @@ block content
         each row, i in rows
           tr
             td
-              a(href='/arduino/kategorije/komp/'+row.id)=row.ime_komponente
+              a(href='/arduino/kategorije/'+row.kateg_id+'/'+row.id)=row.ime_komponente
             td=row.kolicina

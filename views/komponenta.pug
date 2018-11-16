@@ -6,11 +6,11 @@ block content
   table.table
     thead
       tr
-        th(scope='col') Kolicina
+        th(scope='col') Količina
         th(scope='col') Lokacija
     tbody
       each row, i in rows
         tr
           td=row.kolicina
           td=row.ime_lokacije
-  a.btn.btn-primary(href="/arduino/kategorije/"+rows[0].kateg_id) Natrag
+  a.btn.btn-primary(href="/arduino/kategorije/"+kategorija) Natrag
