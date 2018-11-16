@@ -135,7 +135,7 @@ app.get('/arduino/kategorije/:id', function(req, res){
 });
 
 app.get('/arduino/kategorije/komp/:id', function(req, res){
-  let query = 'select t.ime_komponente, t.kratak_opis_komp, k.kolicina, l.ime_lokacije from komponente t, komp_lok_kol k, lokacije l where t.id=k.komp_id and l.id=k.lok_id and t.id='+req.params.id;
+  let query = 'select t.ime_komponente, t.kratak_opis_komp, t.kateg_id, k.kolicina, l.ime_lokacije from komponente t, komp_lok_kol k, lokacije l where t.id=k.komp_id and l.id=k.lok_id and t.id='+req.params.id;
   connection.query(query,function(err, rows, fields){
     if(err) throw err;
 
