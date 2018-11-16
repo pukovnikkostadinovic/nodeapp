@@ -7,6 +7,16 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const config = require('./config/database');
+const mysql = require('mysql');
+
+let connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'dlibreman',
+  database: 'beer'
+});
+
+
 
 
 mongoose.connect(config.database);
@@ -87,6 +97,18 @@ app.get('/', function(req,res){
     }
   });
 });
+connection.connect();
+let query = 'select t.ime_komponente, sum(k.kolicina) kolicina from komponente t, komp_lok_kol k where t.id=k.komp_id group by t.ime_komponente';
+connection.query(query,function(err, rows, fields){
+  if(err) throw err;
+app.get('/arduino', function(req, res){
+  res.render('komponente',{
+    rows:rows
+  });
+});
+});
+connection.end();
+
 
 let articles=require('./routes/articles');
 let users=require('./routes/users');
