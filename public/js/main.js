@@ -43,4 +43,9 @@ socket.on('chat', function(data){
   //output.innerHTML += '<p><strong>' + data.handle + ':</strong>'+data.message+'</p>';
     output.innerHTML = '<p><strong>' + data.state + '</strong></p>';
     output.innerHTML += '<p><strong>' + data.handle + '</strong></p>';
+    if(data.state==true){
+      document.getElementById('onoff').checked=true;
+    }else{
+      document.getElementById('onoff').checked=false;
+    }
 });
