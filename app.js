@@ -7,7 +7,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const config = require('./config/database');
-
+const socket = require('socket.io');
 
 
 mongoose.connect(config.database);
@@ -98,6 +98,16 @@ let arduino=require('./routes/arduino');
 app.use('/articles',articles);
 app.use('/users',users);
 app.use('/arduino',arduino);
-app.listen(3000, function(){
+var server = app.listen(3000, function(){
   console.log('Server started on port 3000...');
+});
+var io = socket(server);
+
+io.on('connection', function(socket){
+  console.log('made socket connection', socket.id);
+
+  socket.on('chat', function(data){
+    console.log(data);
+    io.sockets.emit('chat', data);
+  });
 });

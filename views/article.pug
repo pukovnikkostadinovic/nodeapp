@@ -6,6 +6,11 @@ block content
   p= article.body
   h1= article.on_off
   hr
+  #output
+  label.switch
+    input#onoff(type='checkbox', value='OFF', onclick='toggle(this);')
+    span.slider.round
+  hr
   form(method='POST', action='/articles/arduino/'+article._id)
     button.btn.btn-success(name='on', type='submit', value='1') On
     button.btn.btn-danger(name='off', type='submit', value='0') Off
