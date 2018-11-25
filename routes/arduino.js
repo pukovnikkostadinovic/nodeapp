@@ -87,7 +87,7 @@ router.get('/kategorije/:id', function(req, res){
 });
 
 router.get('/kategorije/:id1/:id2', function(req, res){
-  let query = 'select t.ime_komponente, t.kratak_opis_komp, k.kolicina, l.ime_lokacije from komponente t, komp_lok_kol k, lokacije l where t.id=k.komp_id and l.id=k.lok_id and t.id='+req.params.id2+';';
+  let query = 'select t.ime_komponente, t.kratak_opis_komp, k.kolicina, l.id as lok_id,  l.ime_lokacije from komponente t, komp_lok_kol k, lokacije l where t.id=k.komp_id and l.id=k.lok_id and t.id='+req.params.id2+';';
   let query2 = 'select id, ime_lokacije from lokacije';
   connection.query(query+query2,[1,2],function(err, rows, fields){
     if(err) throw err;
@@ -101,9 +101,16 @@ router.get('/kategorije/:id1/:id2', function(req, res){
   });
 });
 
-router.post('/izmjena/:komp_id', function(req, res){
-  console.log(req.params.komp_id);
-  console.log(req.body.kol);
-  console.log(req.body.lok);
+
+router.post('/izmjena/:kateg_id/:komp_id', function(req,res){
+  for(i=0; i<req.body.lok.length; i++){
+    if(req.body.lok[i]!==req.body.lok_old[i] || req.body.kol[i]!==req.body.kol_old[i]){
+      let query = 'update komp_lok_kol set lok_id='+req.body.lok[i]+', kolicina='+req.body.kol[i]+' where komp_id='+req.params.komp_id+' and lok_id='+req.body.lok_old[i]+';';
+      connection.query(query,function(err, rows, fields){
+        if(err) throw err;
+        res.redirect('/arduino/kategorije/'+req.params.kateg_id+'/'+req.params.komp_id)
+      });
+    }
+  }
 });
 module.exports = router;

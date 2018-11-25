@@ -3,9 +3,7 @@ extends layout
 block content
   h1=komponente[0].ime_komponente
   h3=komponente[0].kratak_opis_komp
-  
-  
-  
+  form(method='POST', action='/arduino/izmjena/'+kategorija_id+'/'+komponenta_id)
     table.table
       thead
         tr
@@ -13,15 +11,17 @@ block content
           th(scope='col') Lokacija
         tbody
           each komponenta, i in komponente
-              p1 hahahahah
-              tr
-                td
-                  input.form-control(name='kol', type='number', value=komponenta.kolicina)
-                td
-                  select.form-control(name='lok')
-                    each lokacija, i in lokacije
-                      if komponenta.ime_lokacije === lokacija.ime_lokacije
-                        option(value=lokacija.id, selected="selected")=lokacija.ime_lokacije
-                      else
-                        option(value=lokacija.id)=lokacija.ime_lokacije
+            tr
+              td
+                input.form-control(name='kol', type='number', value=komponenta.kolicina)
+              td
+                select.form-control(name='lok')
+                  each lokacija, i in lokacije
+                    if komponenta.ime_lokacije === lokacija.ime_lokacije
+                      option(value=lokacija.id, selected="selected")=lokacija.ime_lokacije
+                    else
+                      option(value=lokacija.id)=lokacija.ime_lokacije
+            input(type='hidden', name='lok_old', value=komponenta.lok_id)
+            input(type='hidden', name='kol_old', value=komponenta.kolicina)
+    input(type='submit')
   a.btn.btn-primary(href="/arduino/kategorije/"+kategorija_id) Natrag
