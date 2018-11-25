@@ -108,9 +108,9 @@ router.post('/izmjena/:kateg_id/:komp_id', function(req,res){
       let query = 'update komp_lok_kol set lok_id='+req.body.lok[i]+', kolicina='+req.body.kol[i]+' where komp_id='+req.params.komp_id+' and lok_id='+req.body.lok_old[i]+';';
       connection.query(query,function(err, rows, fields){
         if(err) throw err;
-        res.redirect('/arduino/kategorije/'+req.params.kateg_id+'/'+req.params.komp_id)
       });
     }
   }
+  res.redirect('/arduino/kategorije/'+req.params.kateg_id+'/'+req.params.komp_id)
 });
 module.exports = router;

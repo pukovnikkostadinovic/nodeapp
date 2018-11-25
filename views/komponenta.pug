@@ -23,5 +23,6 @@ block content
                       option(value=lokacija.id)=lokacija.ime_lokacije
             input(type='hidden', name='lok_old', value=komponenta.lok_id)
             input(type='hidden', name='kol_old', value=komponenta.kolicina)
-    input(type='submit')
+            br
+    button.btn-primary(type='submit') Izmjeni
   a.btn.btn-primary(href="/arduino/kategorije/"+kategorija_id) Natrag
