@@ -113,4 +113,8 @@ router.post('/izmjena/:kateg_id/:komp_id', function(req,res){
   }
   res.redirect('/arduino/kategorije/'+req.params.kateg_id+'/'+req.params.komp_id)
 });
+
+router.get('/proba', function(req,res){
+  res.render('proba');
+});
 module.exports = router;

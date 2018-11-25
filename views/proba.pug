@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  .row
+  input(type='hidden', name='count', value='1')
+  #fields.control-group
+    label.control-label(for='field1') Nice Multiple Form Fields
+    #profs.controls
+      form.input-append
+        #field
+          input#field1.input(autocomplete='off', name='prof1', type='text', placeholder='Type something', data-items='8')
+          button#b1.btn.add-more(type='button') +
+      br
+      small Press + to add another form field :)

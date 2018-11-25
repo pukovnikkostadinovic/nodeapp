@@ -21,7 +21,7 @@ input{
     background: #eee;
     border: 0;
     display: block;
-    width: 100%;
+    /*width: 100%;*/
     background: #fff;
     border-bottom: 1px solid #eee;
     font-family: Nunito;
@@ -34,9 +34,10 @@ button{
     font-size: 18px;
     border: 0;
     padding: 12px 0;
-    width: 100%;
+    /*width: 100%;*/
     border-radius: 0 0 2px 2px;
 }
+
 .switch {
   position: relative;
   display: inline-block;
@@ -102,3 +103,11 @@ canvas{
 		-webkit-user-select: none;
 		-ms-user-select: none;
 	}
+
+  * {
+    .border-radius(0) !important;
+  }
+
+  #field {
+      margin-bottom:20px;
+  }
