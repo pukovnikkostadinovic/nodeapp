@@ -74,7 +74,7 @@ router.get('/kategorije', function(req, res){
   });
 });
 
-router.get('/kategorije/:id', function(req, res){
+/*router.get('/kategorije/:id', function(req, res){
   let query = 'select t.id, t.ime_komponente, t.kateg_id, sum(k.kolicina) kolicina, kat.ime_kategorije from komponente t, komp_lok_kol k, kategorije_komponenti kat where t.id=k.komp_id and t.kateg_id = kat.id and t.kateg_id ='+req.params.id+' group by t.id,t.ime_komponente, t.kateg_id, kat.ime_kategorije';
   connection.query(query,function(err, rows, fields){
     if(err) throw err;
@@ -83,7 +83,7 @@ router.get('/kategorije/:id', function(req, res){
       });
   });
 
-});
+});*/
 
 router.get('/kategorije/:id1/:id2', function(req, res){
   let query = 'select t.ime_komponente, t.kratak_opis_komp, k.kolicina, l.id as lok_id,  l.ime_lokacije from komponente t, komp_lok_kol k, lokacije l where t.id=k.komp_id and l.id=k.lok_id and t.id='+req.params.id2+';';
