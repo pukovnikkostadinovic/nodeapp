@@ -63,10 +63,9 @@ router.get('/sve', function(req, res){
 });
 
 router.get('/kategorije', function(req, res){
-  let query = 'select id, ime_kategorije from kategorije_komponenti';
+  let query = 'select distinct t.kateg_id, k.ime_kategorije from komponente t, kategorije_komponenti k where t.kateg_id=k.id';
   connection.query(query,function(err, rows, fields){
     if(err) throw err;
-
     res.render('kategorije',{
       rows:rows
     });
@@ -78,10 +77,9 @@ router.get('/kategorije/:id', function(req, res){
   let query = 'select t.id, t.ime_komponente, t.kateg_id, sum(k.kolicina) kolicina, kat.ime_kategorije from komponente t, komp_lok_kol k, kategorije_komponenti kat where t.id=k.komp_id and t.kateg_id = kat.id and t.kateg_id ='+req.params.id+' group by t.id,t.ime_komponente, t.kateg_id, kat.ime_kategorije';
   connection.query(query,function(err, rows, fields){
     if(err) throw err;
-
     res.render('komp_po_kateg',{
       rows:rows
-    });
+      });
   });
 
 });
