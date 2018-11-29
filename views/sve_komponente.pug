@@ -13,3 +13,5 @@ block content
             td
               a(href="/arduino/kategorije/"+row.kateg_id+"/"+row.id)=row.ime_komponente
             td=row.kolicina
+            td
+              a.btn.btn-danger(href='/arduino/izbrisi/'+row.id) Izbriši

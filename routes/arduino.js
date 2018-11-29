@@ -127,13 +127,12 @@ router.post('/izmjena/:kateg_id/:komp_id', function(req,res){
   res.redirect('/arduino/kategorije/'+req.params.kateg_id+'/'+req.params.komp_id)
 });
 
-router.get('/proba', function(req,res){
-  let query = 'select id, ime_lokacije from lokacije';
-  connection.query(query,function(err, rows, fields){
+router.get('/izbrisi/:komp_id', function(req, res){
+  let query1='delete from komp_lok_kol where komp_id='+req.params.komp_id+';';
+  let query2='delete from komponente where id='+req.params.komp_id+';';
+  connection.query(query1+query2,[1,2],function(err, rows, fields){
     if(err) throw err;
-  res.render('proba',{
-    lokacije:rows
   });
-});
+  res.redirect('/arduino/sve')
 });
 module.exports = router;
