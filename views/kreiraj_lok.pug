@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 Kreiraj lokaciju
+  form(method='POST', action='/arduino/kreiraj_lok')
+    #form-group
+      label Ime lokacije:
+      input.form-control(name='ime_lok', type='text')
+      br
+    input.btn.btn-primary(type='submit', value='Kreiraj')

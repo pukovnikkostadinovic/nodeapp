@@ -135,4 +135,29 @@ router.get('/izbrisi/:komp_id', function(req, res){
   res.redirect('/arduino/sve')
 });
 
+router.get('/kreiraj_kateg', function(req, res){
+  res.render('kreiraj_kateg');
+});
+
+router.post('/kreiraj_kateg', function(req, res){
+  let query = "insert into `kategorije_komponenti` (`ime_kategorije`,`kratak_opis`) values ('"+req.body.ime_kateg+"','"+req.body.k_opis_kateg+"')";
+  connection.query(query,function(err, rows, fields){
+    if(err) throw err;
+  });
+  res.redirect('/arduino/kreiraj_kateg');
+});
+
+router.get('/kreiraj_lok', function(req, res){
+  res.render('kreiraj_lok');
+});
+
+router.post('/kreiraj_lok', function(req, res){
+  let query = "insert into `lokacije` (`ime_lokacije`) values ('"+req.body.ime_lok+"')";
+  /*connection.query(query,function(err, rows, fields){
+    if(err) throw err;
+  });*/
+  res.redirect('/arduino/kreiraj_lok');
+});
+
+
 module.exports = router;

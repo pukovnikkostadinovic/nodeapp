@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 Kreiraj kategoriju
+  form(method='POST', action='/arduino/kreiraj_kateg')
+    #form-group
+      label Ime kategorije:
+      input.form-control(name='ime_kateg', type='text')
+    #form-group
+      label Kratki opis:
+      textarea.form-control(name='k_opis_kateg')
+      br
+    input.btn.btn-primary(type='submit', value='Kreiraj')
