@@ -1,8 +1,8 @@
 extends layout
 
 block content
-  h1 Dodaj komponentu
-  form(method='POST', action='/arduino/dodaj')
+  h1 Kreiraj komponentu
+  form(method='POST', action='/arduino/kreiraj')
     #form-group
       label Ime komponente:
       input.form-control(name='ime_komp', type='text')
@@ -23,4 +23,4 @@ block content
         each lokacija, i in lokacije
           option(value=lokacija.id)=lokacija.ime_lokacije
       br
-    input.btn.btn-primary(type='submit', value='Dodaj')
+    input.btn.btn-primary(type='submit', value='Kreiraj')

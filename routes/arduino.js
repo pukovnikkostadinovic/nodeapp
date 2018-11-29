@@ -12,13 +12,13 @@ let connection = mysql.createConnection({
 
 connection.connect();
 
-router.get('/dodaj', function(req,res){
+router.get('/kreiraj', function(req,res){
   let query = 'select id, ime_kategorije from kategorije_komponenti; select * from lokacije';
 
   connection.query(query, [1,2], function(err, result){
     //console.log(result[0]);
     //console.log(result[1]);
-    res.render('dodaj_komp', {
+    res.render('kreiraj_komp', {
       kategorije:result[0],
       lokacije:result[1]
     });
@@ -26,7 +26,7 @@ router.get('/dodaj', function(req,res){
 
 });
 
-router.post('/dodaj', function(req, res){
+router.post('/kreiraj', function(req, res){
   req.checkBody('ime_komp','Naziv komponente obavezan').notEmpty();
   req.checkBody('k_opis_komp','Kratki opis obavezan').notEmpty();
   req.checkBody('kol','Broj mora biti veći od nule').optional().isInt({ min: 1 });
@@ -37,7 +37,7 @@ router.post('/dodaj', function(req, res){
     for (i = 0; i < errors.length; i++) {
         req.flash('danger',errors[i].msg);
     }
-    res.redirect('/arduino/dodaj');
+    res.redirect('/arduino/kreiraj');
 
   }else{
     let query = "INSERT INTO `komponente` (`ime_komponente`, `kratak_opis_komp`, `kateg_id`) VALUES ('"+req.body.ime_komp+"','"+req.body.k_opis_komp+"',"+req.body.kateg+");";
@@ -46,7 +46,7 @@ router.post('/dodaj', function(req, res){
     connection.query(query+query2,[1,2], function(err, result){
       if(err) throw err;
       req.flash('success','Komponenta dodana');
-      res.redirect('/arduino/dodaj');
+      res.redirect('/arduino/kreiraj');
     });
   }
 });
