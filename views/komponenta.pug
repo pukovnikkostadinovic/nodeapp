@@ -20,9 +20,18 @@ block content
                     if komponenta.ime_lokacije === lokacija.ime_lokacije
                       option(value=lokacija.id, selected="selected")=lokacija.ime_lokacije
                     else
-                      option(value=lokacija.id)=lokacija.ime_lokacije
+                      option(value=lokacija.id)=lokacija.ime_lokacije                         
             input(type='hidden', name='lok_old', value=komponenta.lok_id)
-            input(type='hidden', name='kol_old', value=komponenta.kolicina)
+            input(type='hidden', name='kol_old', value=komponenta.kolicina) 
+          tr
+            th(scope='col') Dodaj komponetu
+          tr
+            td
+              input.form-control(name='kol_dod', type='number', value="0")
+            td
+              select.form-control(name='lok_dod')
+                each lokacija, i in lokacije
+                  option(value=lokacija.id)=lokacija.ime_lokacije
             br
     input.btn.btn-primary(type='submit', value='Izmjeni')
     hr

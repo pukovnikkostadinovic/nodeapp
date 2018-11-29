@@ -105,16 +105,35 @@ router.get('/kategorije/:id1/:id2', function(req, res){
 router.post('/izmjena/:kateg_id/:komp_id', function(req,res){
   for(i=0; i<req.body.lok.length; i++){
     if(req.body.lok[i]!==req.body.lok_old[i] || req.body.kol[i]!==req.body.kol_old[i]){
-      let query = 'update komp_lok_kol set lok_id='+req.body.lok[i]+', kolicina='+req.body.kol[i]+' where komp_id='+req.params.komp_id+' and lok_id='+req.body.lok_old[i]+';';
-      connection.query(query,function(err, rows, fields){
-        if(err) throw err;
-      });
+      if(req.body.kol[i]==0){
+        let query = 'delete from komp_lok_kol where komp_id='+req.params.komp_id+' and (lok_id='+req.body.lok[i]+' or lok_id='+req.body.lok_old[i]+');';
+        connection.query(query,function(err, rows, fields){
+          if(err) throw err;
+        });
+      }else{
+        let query = 'update komp_lok_kol set lok_id='+req.body.lok[i]+', kolicina='+req.body.kol[i]+' where komp_id='+req.params.komp_id+' and lok_id='+req.body.lok_old[i]+';';
+        connection.query(query,function(err, rows, fields){
+          if(err) throw err;
+        });
+      }
     }
+  }
+  if(req.body.kol_dod>0){
+    let query = 'insert into komp_lok_kol(komp_id, lok_id,kolicina) values ('+req.params.komp_id+','+req.body.lok_dod+','+req.body.kol_dod+');';
+    connection.query(query,function(err, rows, fields){
+      if(err) throw err;
+    });
   }
   res.redirect('/arduino/kategorije/'+req.params.kateg_id+'/'+req.params.komp_id)
 });
 
 router.get('/proba', function(req,res){
-  res.render('proba');
+  let query = 'select id, ime_lokacije from lokacije';
+  connection.query(query,function(err, rows, fields){
+    if(err) throw err;
+  res.render('proba',{
+    lokacije:rows
+  });
+});
 });
 module.exports = router;
