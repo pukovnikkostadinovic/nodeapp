@@ -1,7 +1,13 @@
 extends layout
 
 block content
-  ul.list-group
-    each row, i in rows
+  each kategorija, i in kategorije
+    ul.parent.list-group
       li.list-group-item
-        a(href="kategorije/"+row.kateg_id)=row.ime_kategorije
+        h4
+          strong=kategorija.ime_kategorije
+      ul.child.list-group
+        each komponenta, i in komponente
+          if kategorija.kateg_id===komponenta.kateg_id
+            li.list-group-item
+              a(href="kategorije/"+kategorija.kateg_id+'/'+komponenta.id)=komponenta.ime_komponente

@@ -39,6 +39,14 @@ $(document).ready(function(){
   });
 });
 
+$('.child').hide();
+$('.parent').click(function(){
+  var lokacija = $(this).find('ul').attr('id');
+  console.log(lokacija);
+  $(this).siblings('.parent').find('ul').slideUp();
+  $(this).find('ul').slideToggle();
+});
+
 socket.on('chat', function(data){
   //output.innerHTML += '<p><strong>' + data.handle + ':</strong>'+data.message+'</p>';
     output.innerHTML = '<p><strong>' + data.state + '</strong></p>';

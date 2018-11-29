@@ -3,6 +3,7 @@ extends layout
 block content
   h1=komponente[0].ime_komponente
   h3=komponente[0].kratak_opis_komp
+  a.btn.btn-danger(href='/arduino/izbrisi/'+komponenta_id) Izbriši komponentu
   form(method='POST', action='/arduino/izmjena/'+kategorija_id+'/'+komponenta_id)
     table.table
       thead

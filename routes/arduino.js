@@ -63,14 +63,15 @@ router.get('/sve', function(req, res){
 });
 
 router.get('/kategorije', function(req, res){
-  let query = 'select distinct t.kateg_id, k.ime_kategorije from komponente t, kategorije_komponenti k where t.kateg_id=k.id';
-  connection.query(query,function(err, rows, fields){
+  let query1 = 'select distinct t.kateg_id, k.ime_kategorije from komponente t, kategorije_komponenti k where t.kateg_id=k.id;';
+  let query2 = 'select id, ime_komponente, kateg_id from komponente;';
+  connection.query(query1+query2,[1,2],function(err, rows, fields){
     if(err) throw err;
     res.render('kategorije',{
-      rows:rows
+      kategorije:rows[0],
+      komponente:rows[1]
     });
   });
-
 });
 
 router.get('/kategorije/:id', function(req, res){
@@ -133,4 +134,5 @@ router.get('/izbrisi/:komp_id', function(req, res){
   });
   res.redirect('/arduino/sve')
 });
+
 module.exports = router;
