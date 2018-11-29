@@ -132,7 +132,7 @@ router.get('/izbrisi/:komp_id', function(req, res){
   connection.query(query1+query2,[1,2],function(err, rows, fields){
     if(err) throw err;
   });
-  res.redirect('/arduino/sve')
+  res.redirect('/arduino/kategorije')
 });
 
 router.get('/kreiraj_kateg', function(req, res){
