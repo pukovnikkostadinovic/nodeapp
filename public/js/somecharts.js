@@ -1,131 +1,93 @@
-var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		var config = {
-			type: 'line',
-			data: {
-				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-				datasets: [{
-					label: 'My First dataset',
-					backgroundColor: window.chartColors.red,
-					borderColor: window.chartColors.red,
-					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
-					],
-					fill: false,
-				}, {
-					label: 'My Second dataset',
-					fill: false,
-					backgroundColor: window.chartColors.blue,
-					borderColor: window.chartColors.blue,
-					data: [
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor(),
-						randomScalingFactor()
-					],
-				}]
-			},
-			options: {
-				responsive: true,
-				title: {
-					display: true,
-					text: 'Chart.js Line Chart'
-				},
-				tooltips: {
-					mode: 'index',
-					intersect: false,
-				},
-				hover: {
-					mode: 'nearest',
-					intersect: true
-				},
-				scales: {
-					xAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Month'
-						}
-					}],
-					yAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Value'
-						}
-					}]
-				}
-			}
-		};
+var socket = io.connect('http://localhost:3000');
+//var socket = io.connect('http://yeti.cf:80');
 
-		window.onload = function() {
-			var ctx = document.getElementById('canvas').getContext('2d');
-			window.myLine = new Chart(ctx, config);
-		};
+var ctx = document.getElementById('chart').getContext('2d')
+    var ctx1 = document.getElementById('bar_chart').getContext('2d')
+    var hdata = {
+      labels: [0],
+      datasets: [{
+        data: [0],
+        label: 'Temperature 1',
+        fill: false,
+        //backgroundColor: '#fdfefe',
+        borderColor:'#ff6600'
+      },
+      {
+        data: [0],
+        label: 'Temperature 2',
+        backgroundColor: '#fdfefe',
+        fill: false,
+        borderColor:'#2c3e50'
+      }]
+    }
+    var bar_data = {
+      labels:["TEmp1","Temp2"],
+      datasets: [
+      {
+        label:['temp1'],
+        data:[0],
+        fill:false,
+        backgroundColor:'#ff6600'
+      },
+      {
+        label:['temp2'],
+        data:[0],
+        fill: false,
+        backgroundColor:'#2c3e50'
+      }]
+    }
+    var optionsAnimations = {reponsive:true,
+      animation: {
+      duration: 2000,
+      easing:'linear'
+    } }
+    var chart = new Chart(ctx, {
+      type: 'line',
+      data: hdata,
+      options: optionsAnimations
+    });
+    var bar_chart = new Chart(ctx1, {
+      type:'bar',
+      data:bar_data,
+      options:{
+        scales:{
+          yAxes: [
+            {
+              display:true,
+              ticks:{
+                beginAtZero:true,
+                //min:0,
+                steps: 11,
+                stepValue: 1,
+                max:11
+              }
+            }
+          ]
+        },
+        responsive:true,
+        animation:{
+          duration: 2000,
+          easing:'linear'
+        }
+      }
+    });
+    socket.on('temperature', function (value) {
+      var length = hdata.labels.length
+      if (length >= 30) {
+        hdata.datasets[0].data.shift()
+        hdata.datasets[1].data.shift()
+        hdata.labels.shift()
+      }
 
-		document.getElementById('randomizeData').addEventListener('click', function() {
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data = dataset.data.map(function() {
-					return randomScalingFactor();
-				});
+      hdata.labels.push(moment().format('HH:mm:ss'))
+      hdata.datasets[0].data.push(value.temp1)
+      hdata.datasets[1].data.push(value.temp2)
 
-			});
+      bar_data.datasets[0].data.push(value.temp1);
+      bar_data.datasets[1].data.push(value.temp2);
+      bar_data.datasets[0].data.shift()
+      bar_data.datasets[1].data.shift()
+      bar_chart.update(0);
+      chart.update();
 
-			window.myLine.update();
-		});
-
-		var colorNames = Object.keys(window.chartColors);
-		document.getElementById('addDataset').addEventListener('click', function() {
-			var colorName = colorNames[config.data.datasets.length % colorNames.length];
-			var newColor = window.chartColors[colorName];
-			var newDataset = {
-				label: 'Dataset ' + config.data.datasets.length,
-				backgroundColor: newColor,
-				borderColor: newColor,
-				data: [],
-				fill: false
-			};
-
-			for (var index = 0; index < config.data.labels.length; ++index) {
-				newDataset.data.push(randomScalingFactor());
-			}
-
-			config.data.datasets.push(newDataset);
-			window.myLine.update();
-		});
-
-		document.getElementById('addData').addEventListener('click', function() {
-			if (config.data.datasets.length > 0) {
-				var month = MONTHS[config.data.labels.length % MONTHS.length];
-				config.data.labels.push(month);
-
-				config.data.datasets.forEach(function(dataset) {
-					dataset.data.push(randomScalingFactor());
-				});
-
-				window.myLine.update();
-			}
-		});
-
-		document.getElementById('removeDataset').addEventListener('click', function() {
-			config.data.datasets.splice(0, 1);
-			window.myLine.update();
-		});
-
-		document.getElementById('removeData').addEventListener('click', function() {
-			config.data.labels.splice(-1, 1); // remove the label first
-
-			config.data.datasets.forEach(function(dataset) {
-				dataset.data.pop();
-			});
-
-			window.myLine.update();
-		});
+    })

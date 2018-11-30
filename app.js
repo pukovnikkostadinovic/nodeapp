@@ -8,7 +8,7 @@ const session = require('express-session');
 const passport = require('passport');
 const config = require('./config/database');
 const socket = require('socket.io');
-
+const EventEmitter = require('events')
 
 mongoose.connect(config.database);
 let db = mongoose.connection;
@@ -22,6 +22,8 @@ db.on('error', function (err) {
 });
 
 const app = express();
+const events = new EventEmitter()
+
 
 let Article = require('./models/article');
 
@@ -95,9 +97,11 @@ app.get('/', function(req,res){
 let articles=require('./routes/articles');
 let users=require('./routes/users');
 let arduino=require('./routes/arduino');
+let beer=require('./routes/beer');
 app.use('/articles',articles);
 app.use('/users',users);
 app.use('/arduino',arduino);
+app.use('/beer', beer);
 var server = app.listen(3000, function(){
   console.log('Server started on port 3000...');
 });
@@ -105,9 +109,17 @@ var io = socket(server);
 
 io.on('connection', function(socket){
   console.log('made socket connection', socket.id);
-
-  socket.on('chat', function(data){
-    console.log(data);
-    io.sockets.emit('chat', data);
+  events.on('temperature', function(value1,value2){
+    socket.emit('temperature', {
+      temp1:value1,
+      temp2:value2
+    });
   });
 });
+
+setInterval(() => {
+  const temperature1 = Math.round(Math.random() * 10)
+  const temperature2 = Math.round(Math.random() * 10)
+  //console.log('temp 1 je: '+temperature);
+  events.emit('temperature', temperature1,temperature2)
+}, 1000);

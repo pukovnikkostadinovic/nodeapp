@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:3000');
+var socket = io.connect('http://localhost:80');
 //var socket = io.connect('http://yeti.cf:80');
 var state1;
 var output = document.getElementById('output');
