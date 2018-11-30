@@ -109,12 +109,16 @@ var io = socket(server);
 
 io.on('connection', function(socket){
   console.log('made socket connection', socket.id);
-  events.on('temperature', function(value1,value2){
+  socket.on('temperature', function(data){
+    //console.log(data);
+    io.sockets.emit('temperature', data);
+  });
+  /*events.on('temperature', function(value1,value2){
     socket.emit('temperature', {
       temp1:value1,
       temp2:value2
     });
-  });
+  });*/
 });
 
 setInterval(() => {

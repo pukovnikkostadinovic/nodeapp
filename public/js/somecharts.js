@@ -36,9 +36,10 @@ var ctx = document.getElementById('chart').getContext('2d')
         backgroundColor:'#2c3e50'
       }]
     }
-    var optionsAnimations = {reponsive:true,
+    var optionsAnimations = {
+			reponsive:true,
       animation: {
-      duration: 2000,
+      duration: 1400,
       easing:'linear'
     } }
     var chart = new Chart(ctx, {
@@ -64,9 +65,9 @@ var ctx = document.getElementById('chart').getContext('2d')
             }
           ]
         },
-        responsive:true,
+        responsive:false,
         animation:{
-          duration: 2000,
+          duration: 100,
           easing:'linear'
         }
       }
@@ -83,10 +84,10 @@ var ctx = document.getElementById('chart').getContext('2d')
       hdata.datasets[0].data.push(value.temp1)
       hdata.datasets[1].data.push(value.temp2)
 
-      bar_data.datasets[0].data.push(value.temp1);
-      bar_data.datasets[1].data.push(value.temp2);
       bar_data.datasets[0].data.shift()
       bar_data.datasets[1].data.shift()
+      bar_data.datasets[0].data.push(value.temp1);
+      bar_data.datasets[1].data.push(value.temp2);
       bar_chart.update(0);
       chart.update();
 
