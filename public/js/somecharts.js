@@ -8,17 +8,10 @@ var ctx2 = document.getElementById('bar_chart').getContext('2d')
       labels: [0],
       datasets: [{
         data: [0],
-        label: 'Temperature 1',
+        label: 'Vlažnost',
         fill: false,
         //backgroundColor: '#fdfefe',
         borderColor:'#ff6600'
-      },
-      {
-        data: [0],
-        label: 'Temperature 2',
-        backgroundColor: '#fdfefe',
-        fill: false,
-        borderColor:'#2c3e50'
       }]
     }
 		var temp_data = {
@@ -79,6 +72,11 @@ var ctx2 = document.getElementById('bar_chart').getContext('2d')
       data: temp_data,
       options: temp_options
     });
+		var humid_chart = new Chart(ctx1, {
+      type: 'line',
+      data: hdata,
+      options: optionsAnimations
+    });
     var bar_chart = new Chart(ctx2, {
       type:'bar',
       data:bar_data,
@@ -108,13 +106,15 @@ var ctx2 = document.getElementById('bar_chart').getContext('2d')
       var length = temp_data.labels.length
       if (length >= 30) {
         temp_data.datasets[0].data.shift()
-        //temp_data.datasets[1].data.shift()
+        hdata.datasets[0].data.shift()
         temp_data.labels.shift()
+				hdata.labels.shift()
       }
 
       temp_data.labels.push(moment().format('HH:mm:ss'))
+			hdata.labels.push(moment().format('HH:mm:ss'))
       temp_data.datasets[0].data.push(value.temp1)
-      //temp_data.datasets[1].data.push(value.temp2)
+      hdata.datasets[0].data.push(value.temp2)
 
       bar_data.datasets[0].data.shift()
       //bar_data.datasets[1].data.shift()
@@ -122,5 +122,6 @@ var ctx2 = document.getElementById('bar_chart').getContext('2d')
       //bar_data.datasets[1].data.push(value.temp2);
       bar_chart.update(0);
       chart.update();
+			humid_chart.update();
 
     })
