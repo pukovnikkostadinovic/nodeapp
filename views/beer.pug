@@ -2,7 +2,9 @@ extends layout
 
 block content
   h1 Temperature
-  canvas#chart(width='400', height='150')
+  canvas#line_chart_temp(width='400', height='150')
+  hr
+  canvas#line_chart_humid(width='400', height='150')
   hr
   h1 Bar chart
   canvas#bar_chart(width='400', height='150')
